@@ -1,73 +1,18 @@
 ﻿@page "/bindproperty"
 
-@* One Way Data Binding *@
-<h3>Product - One Way Data Binding</h3>
-
-Name: @Product.Name
-<br />
-Price: @Product.Price
-<br />
-IsActive: @Product.IsActive
-
-
-@* Two Way Data Binding *@
-<h3 class="mt-5">Product - Two Way Data Binding</h3>
-
-Name: @Product.Name
-<br />
-Input Price:
-<input type="number" @bind="@Product.Price" @bind:event="oninput" />
-<br />
-Price: @Product.Price
-<br />
-<br />
-IsActive:
-<input type="checkbox" @bind="@Product.IsActive" />
-<br />
-IsActive: @Product.IsActive
-<br />
-This Product is: @(Product.IsActive ? "Active" : "InActive")
-<br />
-<br />
-
-
-Product Properties Key:
-<select @bind="SelectedProperties">
-    @foreach (var prop in Product.ProductProperties)
-    {
-        <option value="@prop.Key">@prop.Key</option>
-    }
-</select>
-<br />
-
-Selected Properties: @SelectedProperties
-
-@if (!string.IsNullOrEmpty(SelectedProperties))
-{
-    <p>Selected Value: @Product.ProductProperties.FirstOrDefault(x => x.Key == SelectedProperties).Value</p>
-}
-
-
-
 <div class="row">
+    @* Two Way Data Binding *@
     <div class="col-6 border p-3">
-        Name: @Product.Name
-        <br />
-        Input Price:
-        <input type="number" @bind="@Product.Price" @bind:event="oninput" />
-        <br />
-        Price: @Product.Price
-        <br />
-        <br />
-        IsActive:
-        <input type="checkbox" @bind="@Product.IsActive" />
-        <br />
-        IsActive: @Product.IsActive
-        <br />
-        This Product is: @(Product.IsActive ? "Active" : "InActive")
+        <h3 class="text-primary">Product Playground</h3>
+        <hr />
+
+        Input Price: <input type="number" @bind="@Product.Price" @bind:event="oninput" />
         <br />
         <br />
 
+        IsActive: <input type="checkbox" @bind="@Product.IsActive" />
+        <br />
+        <br />
 
         Product Properties Key:
         <select @bind="SelectedProperties">
@@ -77,25 +22,75 @@ Selected Properties: @SelectedProperties
             }
         </select>
         <br />
+    </div>
+
+    @* One Way Data Binding *@
+    <div class="col-6 border p-3">
+        <h3 class="text-primary">Product Summary</h3>
+        <hr />
+
+        Name: @Product.Name
+        <br />
+
+        Price: @Product.Price
+        <br />
+        <br />
+
+        IsActive: @Product.IsActive
+        <br />
+        This Product is: @(Product.IsActive ? "Active" : "InActive")
+        <br />
+        <br />
 
         Selected Properties: @SelectedProperties
-
         @if (!string.IsNullOrEmpty(SelectedProperties))
         {
             <p>Selected Value: @Product.ProductProperties.FirstOrDefault(x => x.Key == SelectedProperties).Value</p>
         }
     </div>
+
+    @* Product Table *@
+    <div class="mt-5 col-12 border p-3">
+        <h3 class="text-primary">Product Table</h3>
+        <hr/>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <td>Name</td>
+                <td>Price</td>
+                <td>Is Active</td>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in ProductList)
+            {
+                <tr>
+                    <td><input type="text" @bind="item.Name" @bind:event="oninput"/></td>
+                    <td><input type="text" @bind="item.Price" @bind:event="oninput"/></td>
+                    <td><input type="checkbox" @bind="item.IsActive" /></td>
+                </tr>
+            }
+            </tbody>
+        </table>
+        
+        <h3 class="mt-5 text-primary">Product Summary</h3>
+        <hr/>
+        @foreach (var item in ProductList)
+        {
+            <p>@item.Name [Price: @item.Price€] is @(item.IsActive)</p>
+        }
+    </div>
 </div>
+
 
 
 @code {
     private string SelectedProperties = string.Empty;
 
-    Product Product = new()
+    private Product Product = new()
         {
             Id = 1,
             Name = "Product 1",
-            Price = 0,
             IsActive = true,
             ProductProperties = new List<ProductProperty>()
             {
@@ -138,5 +133,19 @@ Selected Properties: @SelectedProperties
                 new ProductProperty{ Id = 3, Key ="Pages", Value = "300"}
             }
             });
+
+        ProductList.Add(new()
+        {
+            Id = 1,
+            Name = "Osam Generacija Thallera",
+            Price = 29.99,
+            IsActive = true,
+            ProductProperties = new List<ProductProperty>()
+            {
+                new ProductProperty{ Id = 1, Key ="Cover", Value = "Soft"},
+                new ProductProperty{ Id = 2, Key ="Size", Value = "B5"},
+                new ProductProperty{ Id = 3, Key ="Pages", Value = "120"}
+            }
+        });
     }
 }
