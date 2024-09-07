@@ -1,0 +1,76 @@
+﻿@page "/routing"
+
+@page "/routing/{ParameterOne}"
+@page "/routing/{ParameterOne}/{ParameterTwo}"
+@page "/routing/{ParameterOne}/{ParameterTwo}/{ParameterThree:int}"
+
+@page "/routing/all/{*PageParameters}"
+
+@inject NavigationManager _NavigationManager
+
+<PageTitle>Routing</PageTitle>
+
+<h3 class="mb-5 text-primary">Routing</h3>
+
+Parameter One: @ParameterOne
+<br />
+Parameter Two: @ParameterTwo
+<br />
+Parameter Three: @ParameterThree
+<hr />
+PageParameters: @PageParameters
+<hr />
+
+
+<h3 class="mt-5 mb-2 text-primary">Test Navigating</h3>
+
+<div class="mt-3 p-3 bg-light border rounded-3">
+    <a href="routing?ParameterOne=Learn&ParameterTwo=Blazor" class="btn btn-primary">Navigate to Query parameter - with href</a>
+    <button class="btn btn-success" @onclick="LoadParameters">Load Parameters</button>
+</div>
+<div class="mt-3 p-3 bg-light border rounded-3">
+    <a href="/routing/Learn/Blazor" class="btn btn-primary">Navigate with href</a>
+    <button @onclick="NavigateToQueryParameter" class="btn btn-success">Navigate to Query parameter with Navigation Manager</button>
+</div>
+
+
+<div class="mt-5 bg-light rounded-3" style="height: 1000px"></div>
+<h3 id="targetElement" class="mt-5 text-primary">Target Navigation Element</h3>
+<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum elementum placerat nisi vitae scelerisque. Etiam consectetur lobortis elit, eget placerat lectus accumsan nec. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Cras lobortis, orci a pretium venenatis, sapien libero fermentum nulla, in faucibus ante ex et erat. Nullam vulputate ante sed ante condimentum sodales. Ut vulputate nisl non vestibulum facilisis. Nam a volutpat felis, at varius lacus. Aliquam in risus et augue tempus ultrices sit amet eget neque. Aliquam aliquam pulvinar ligula, vel consequat erat pharetra nec. Suspendisse mattis lectus ut justo sagittis consequat. Ut vel imperdiet orci. Sed tristique orci sed orci fringilla consectetur. Integer vel turpis et massa ultricies tincidunt vitae at orci. Nulla sit amet elit odio.</p>
+
+@code {
+
+    [Parameter]
+    public string ParameterOne { get; set; } = string.Empty;
+
+    [Parameter]
+    public string ParameterTwo { get; set; } = string.Empty;
+
+    [Parameter]
+    public int ParameterThree { get; set; }
+
+    [Parameter]
+    public string PageParameters { get; set; } = string.Empty;
+
+
+
+    private void LoadParameters()
+    {
+        var uri = new Uri(_NavigationManager.Uri);
+        var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
+
+        // Second way
+        // var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
+
+        ParameterOne = query["ParameterOne"];
+        ParameterTwo = query["ParameterTwo"];
+
+        //_NavigationManager.Refresh(forceReload: true);
+    }
+
+    private void NavigateToQueryParameter()
+    {
+        //_NavigationManager.NavigateTo("/routing/Learn/Blazor");
+        _NavigationManager.NavigateTo("routing?ParameterOne=Learn&ParameterTwo=Blazor");
+    }
+}

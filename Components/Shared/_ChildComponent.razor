@@ -1,0 +1,35 @@
+﻿<div class="mt-2 p-4 border rounded-3">
+    <button class="mb-3 btn btn-primary" @onclick="OnButtonClick">Click Me</button>
+
+    <div class="alert alert-info">
+        <b>Title:</b> @Title
+    </div>
+    
+    @if (ChildContent is not null)
+    {
+        <div class="alert alert-secondary">
+            <b>ChildContent:</b> @ChildContent
+        </div>
+    }
+
+    <_GrandChildComponent FowardMessageForGrandChild="@FowardMessageForGrandChild" />
+    
+</div>
+
+
+
+
+@code {
+
+    [Parameter]
+    public string Title { get; set; } = string.Empty;
+
+    [Parameter]
+    public RenderFragment? ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback OnButtonClick { get; set; }
+
+    [Parameter]
+    public string FowardMessageForGrandChild { get; set; } = string.Empty;
+}

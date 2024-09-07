@@ -1,0 +1,40 @@
+﻿@page "/parent"
+
+<PageTitle>Parent Page</PageTitle>
+
+<h3 class="text-primary">Parent Page</h3>
+
+@if (!string.IsNullOrEmpty(messageText))
+{
+    <div class="alert alert-success">
+        @messageText
+    </div>
+}
+
+@* <_ChildComponent Title="Title without ChildContent !"
+                 OnButtonClick="ShowMessage" /> *@
+
+<CascadingValue Value="@DirectMessageForGrandChild" Name="Message">
+    <CascadingValue Value="@SecondMessageForGrandChild" Name="SecondMessage">
+        <_ChildComponent Title="This Title is passed as a parameter from Parent Page to Child Component !"
+                         FowardMessageForGrandChild="This message is passed from Parent Page to Child Component and then Child to Grand Child Component!"
+                         OnButtonClick="ShowMessage">
+            Some Text between the Tags from Parent Page...
+        </_ChildComponent>
+    </CascadingValue>
+</CascadingValue>
+
+
+@code {
+    private string messageText { get; set; } = string.Empty;
+
+    private string DirectMessageForGrandChild = "This is 'CascadingValue' Direct Message passed direct Parent Page to Grand Child Component !";
+
+    private string SecondMessageForGrandChild = "This is 'CascadingValue' Second Message passed direct Parent Page to Grand Child Component !";
+    
+
+    private void ShowMessage()
+    {
+        messageText = "Button inside ChildComponent was clicked !";
+    }
+}

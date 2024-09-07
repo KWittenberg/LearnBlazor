@@ -1,0 +1,143 @@
+﻿@page "/product"
+
+<PageTitle>Product</PageTitle>
+
+<h3 class="text-primary">Product:</h3>
+<p>Favorite Count: @FavoriteCount</p>
+<p>Selected Product Count: @SelectedProduct</p>
+
+<div class="mt-2 p-2">
+    <div class="row">
+        @foreach (var item in ProductList)
+        {
+            <div class="col-4 bg-light border rounded-3">
+                <h4 class="text-primary">@item.Name</h4>
+
+                Id: @item.Id
+                <br />
+                Price: @item.Price
+                <br />
+                
+                @* Sa Metodom *@
+                @* <input type="checkbox" @onchange="FavoriteUpdated" /> Add to Favorite
+                <br /> *@
+                
+                @* Direkno pozivanje *@
+                <input type="checkbox" @onchange="(args)=>FavoriteCountChange((bool)(args.Value ?? false))" /> Add to Favorite
+                <br />
+                <input type="checkbox" @bind="@item.IsActive" /> Show Properties
+                <br />
+
+                @if (item.IsActive)
+                {
+                    <div class="mt-1 p-3 bg-white border">
+                        @foreach (var productProperties in item.ProductProperties)
+                        {
+                            <p>@productProperties.Key - @productProperties.Value</p>
+                        }
+                    </div>
+                }
+
+                <input class="mt-2 mb-2 btn btn-danger" type="button" value="Delete" @onclick="()=>RemoveProduct(item.Id)" />
+            </div>
+        }
+    </div>
+</div>
+
+<div class="mt-2 p-2">
+    <div class="row">
+        @foreach (var item in ProductList)
+        {
+            <_InvidualComponent Product="item"
+                                OnFavoriteUpdated="FavoriteCountChange"
+                                OnSelectedProductChange="UpdateSelectedProduct">
+            </_InvidualComponent>
+        }
+    </div>
+</div>
+
+
+
+@code {
+    public int FavoriteCount { get; set; } = 0;
+
+    private string SelectedProduct = string.Empty;
+
+    List<Product> ProductList = new();
+
+
+
+    protected override void OnInitialized()
+    {
+        ProductList.Add(new()
+            {
+                Id = 1,
+                Name = "Rudina",
+                Price = 39.99,
+                IsActive = true,
+                ProductProperties = new List<ProductProperty>()
+            {
+                new ProductProperty{ Id = 1, Key ="Cover", Value = "Hard"},
+                new ProductProperty{ Id = 2, Key ="Size", Value = "B5"},
+                new ProductProperty{ Id = 3, Key ="Pages", Value = "250"}
+            }
+            });
+
+        ProductList.Add(new()
+            {
+                Id = 2,
+                Name = "Puvarija",
+                Price = 34.99,
+                IsActive = true,
+                ProductProperties = new List<ProductProperty>()
+            {
+                new ProductProperty{ Id = 1, Key ="Cover", Value = "Soft"},
+                new ProductProperty{ Id = 2, Key ="Size", Value = "B5"},
+                new ProductProperty{ Id = 3, Key ="Pages", Value = "300"}
+            }
+            });
+
+        ProductList.Add(new()
+            {
+                Id = 3,
+                Name = "Osam Generacija Thallera",
+                Price = 29.99,
+                IsActive = false,
+                ProductProperties = new List<ProductProperty>()
+            {
+                new ProductProperty{ Id = 1, Key ="Cover", Value = "Soft"},
+                new ProductProperty{ Id = 2, Key ="Size", Value = "B5"},
+                new ProductProperty{ Id = 3, Key ="Pages", Value = "120"}
+            }
+            });
+    }
+
+    private async Task FavoriteUpdated(ChangeEventArgs args)
+    {
+        FavoriteCountChange((bool)(args.Value ?? false));
+    }
+
+    protected void FavoriteCountChange(bool isSelected)
+    {
+        if (isSelected)
+        {
+            FavoriteCount++;
+        }
+        else
+        {
+            FavoriteCount--;
+        }
+    }
+
+    protected void UpdateSelectedProduct(string productName)
+    {
+        SelectedProduct = productName;
+    }
+
+
+    private void RemoveProduct(int id)
+    {
+        var product = ProductList.FirstOrDefault(x => x.Id == id);
+        if (product is not null) ProductList.Remove(product);
+    }
+}

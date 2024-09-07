@@ -1,0 +1,18 @@
+﻿<div class="row m-0 bg-info rounded-3">
+    <h4 class="mt-3">Grand Child Component</h4>
+    <p><b>Foward Message:</b> @FowardMessageForGrandChild</p>
+    <p><b>Direct Message:</b> @DirectMessageForGrandChild</p>
+    <p><b>Second Message:</b> @SecondMessageForGrandChild</p>
+</div>
+
+@code {
+
+    [Parameter]
+    public string FowardMessageForGrandChild { get; set; } = string.Empty;
+
+    [CascadingParameter(Name = "Message")]
+    public string DirectMessageForGrandChild { get; set; } = string.Empty;
+
+    [CascadingParameter(Name = "SecondMessage")]
+    public string SecondMessageForGrandChild { get; set; } = string.Empty;
+}

@@ -1,0 +1,15 @@
+﻿<input class="mt-2 mb-2 btn btn-danger" type="button" value="Delete" @onclick="()=>RemoveProduct(Id)" />
+
+@code {
+
+    [Parameter]
+    public int Id { get; set; }
+
+
+
+    private void RemoveProduct(int id)
+    {
+        // var product = ProductList.FirstOrDefault(x => x.Id == id);
+        // if (product is not null) ProductList.Remove(product);
+    }
+}
