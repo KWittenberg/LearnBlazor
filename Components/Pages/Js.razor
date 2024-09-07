@@ -1,0 +1,74 @@
+﻿@page "/js"
+
+@inject IJSRuntime JsRuntime
+
+<PageTitle>JavaScript</PageTitle>
+
+<h3 class="mb-5 text-primary">JavaScript</h3>
+
+
+<div>
+    <button class="btn btn-primary" @onclick="TestConfirmBox">Test Confirm Button</button>
+</div>
+
+<div class="row">
+    @if (ConfirmResult)
+    {
+        <p>Confirmation Successful!</p>
+    }
+    else
+    {
+        <p>Pending Confirmation!</p>
+    }
+</div>
+
+<h5 class="mt-5 text-primary">Toast</h5>
+<div class="row p-4 bg-light border rounded-3">
+    <button class="btn btn-success w-50" @onclick="ToastrSuccess">Toast Success</button>
+    <button class="btn btn-danger w-50" @onclick="ToastrError">Toast Error</button>
+</div>
+
+<h5 class="mt-5 text-primary">Sweetalert</h5>
+<div class="row p-4 bg-light border rounded-3">
+    <button class="btn btn-success w-50" @onclick="SweetalertSuccess">Sweetalert Success</button>
+    <button class="btn btn-danger w-50" @onclick="SweetalertError">Sweetalert Error</button>
+</div>
+
+
+
+@code {
+
+    private bool ConfirmResult { get; set; }
+    
+    private string ConfirmMessage = "Are you sure you want to click here?";
+
+
+    private async Task TestConfirmBox()
+    {
+        ConfirmResult = await JsRuntime.InvokeAsync<bool>("confirm", ConfirmMessage);
+    }
+
+    private async Task ToastrSuccess()
+    {
+        // await JsRuntime.InvokeVoidAsync("showToastr", "success", "Success Notification!");
+        await JsRuntime.ToastrSuccess("Success Notification!");
+    }
+
+    private async Task ToastrError()
+    {
+        // await JsRuntime.InvokeVoidAsync("showToastr", "error", "Error Notification!");
+        await JsRuntime.ToastrError("Error Notification!");
+    }
+
+    private async Task SweetalertSuccess()
+    {
+        // await JsRuntime.InvokeVoidAsync("showSwal", "success", "Sweetalert Success!");
+        await JsRuntime.SweetalertSuccess("Sweetalert Success!");
+    }
+
+    private async Task SweetalertError()
+    {
+        // await JsRuntime.InvokeVoidAsync("showSwal", "error", "Sweetalert Error!");
+        await JsRuntime.SweetalertError("Sweetalert Error!");
+    }
+}

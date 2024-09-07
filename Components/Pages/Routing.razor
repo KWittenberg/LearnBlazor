@@ -8,6 +8,7 @@
 
 @inject NavigationManager _NavigationManager
 
+
 <PageTitle>Routing</PageTitle>
 
 <h3 class="mb-5 text-primary">Routing</h3>
@@ -59,7 +60,7 @@ PageParameters: @PageParameters
         var uri = new Uri(_NavigationManager.Uri);
         var query = Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(uri.Query);
 
-        // Second way
+        // SecondWay
         // var query = System.Web.HttpUtility.ParseQueryString(uri.Query);
 
         ParameterOne = query["ParameterOne"];

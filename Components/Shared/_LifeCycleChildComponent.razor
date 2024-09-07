@@ -1,0 +1,27 @@
+﻿<h5 class="mt-5 text-primary">CHILD Event Type - Called</h5>
+<div class="p-4 bg-light border rounded-3">
+    @foreach (var item in EventType)
+    {
+        <p>@item</p>
+    }
+</div>
+
+
+@code {
+
+    [Parameter]
+    public int CountValue { get; set; }
+    
+    List<string> EventType = new List<string>();
+
+
+    protected override void OnInitialized()
+    {
+        EventType.Add("OnInitialized is called");
+    }
+
+    protected override void OnParametersSet()
+    {
+        EventType.Add("OnParametersSet is called");
+    }
+}
